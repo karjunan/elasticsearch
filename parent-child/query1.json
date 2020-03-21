@@ -1,6 +1,8 @@
 {
+    "_source" : ["data"],
     "query": {
       "match_all": {}
     },
     "sort": ["_id"]
-}
+
+  }

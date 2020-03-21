@@ -26,36 +26,43 @@ curl -XPUT 'localhost:9200/index_three?pretty' -d @join2.json -H 'Content-Type:a
 curl -XPUT 'localhost:9200/index_one?pretty' -d @join2.json -H 'Content-Type:application/json'
 
 ---------parent-child-relationship----------------
+ //Delete command
+ curl -XDELETE 'localhost:9200/index_six'
+ 
+
 //create a index which holds parent and child and grand child mapping
 curl -XPUT 'localhost:9200/index_six?pretty' -d @join-index.json -H 'Content-type: application/json'
 
 //create question document
-curl -XPOST 'localhost:9200/index_six/_doc' -d @question.json -H 'Content-type: application/json'
+curl -XPOST 'localhost:9200/index_six/_doc/1' -d @question.json -H 'Content-type: application/json'
 
 //get the question data inserted
-curl -XGET 'localhost:9200/index_six/_doc/aM2G-HABJghyi_9lZpdh?pretty' -H 'Content-type: application/json'
+curl -XGET 'localhost:9200/index_six/_doc/1?pretty' -H 'Content-type: application/json'
 
 
 //create another question
-curl -XPOST 'localhost:9200/index_six/_doc' -d @question2.json -H 'Content-type: application/json'
+curl -XPOST 'localhost:9200/index_six/_doc/2' -d @question2.json -H 'Content-type: application/json'
 
 //get the question2 data which was inserted above
-curl -XGET 'localhost:9200/index_six/_doc/ac2L-HABJghyi_9lDJcu?pretty' -H 'Content-type: application/json'
+curl -XGET 'localhost:9200/index_six/_doc/2' -H 'Content-type: application/json'
 
 
 //create an answer for question1
-curl -XPOST 'localhost:9200/index_six/_doc?routing=aM2G-HABJghyi_9lZpdh' -d @answer1.json -H 'Content-type: application/json'
+curl -XPOST 'localhost:9200/index_six/_doc/3?routing=1' -d @answer1.json -H 'Content-type: application/json'
 
 //get answer which was create above
-curl -XGET 'localhost:9200/index_six/_doc/as2R-HABJghyi_9l85dq?pretty' -H 'Content-type:application/json'
+curl -XGET 'localhost:9200/index_six/_doc/1?pretty' -H 'Content-type:application/json'
 
 //create another Answer for question 1
-curl -XPOST 'localhost:9200/index_six/_doc?routing=aM2G-HABJghyi_9lZpdh' -d @answer2.json -H 'Content-type: application/json'
+curl -XPOST 'localhost:9200/index_six/_doc/4?routing=1' -d @answer2.json -H 'Content-type: application/json'
 
 //get all the document posted (questions and answers)
-curl -XGET 'localhost:9200/index_six/_search' -d @query1.json -H 'Content-type:application/json'                         
+curl -XGET 'localhost:9200/index_six/_search?pretty' -d @query1.json -H 'Content-type:application/json'                         
 
 
+//Get the parent based on child record
+ curl -XGET 'localhost:9200/index_six/_search?pretty' -d @search-child-answer.json -H 'Content-type: application/json'
+ 
 
 
 
