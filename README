@@ -1,0 +1,60 @@
+ docker network create somenetwork
+ 
+ docker run -d --name elasticsearch --net somenetwork -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" elasticsearch:7.6.1
+ 
+curl -XPUT 'localhost:9200/books?&pretty'
+
+curl -XGET 'localhost:9200/books/_mapping?&pretty'
+
+curl -XPOST 'http://localhost:9200/books/fiction/1?pretty' -d @books.json -H 'Content-Type: application/json'
+
+curl -XDELETE 'http://localhost:9200/books?pretty'
+
+curl -XPUT 'http://localhost:9200/count/mycount/1?&pretty' -H 'Content-Type: application/json' -d' {"count": "5"} '
+ 
+
+curl -XPUT 'http://localhost:9200/count1?pretty' -H 'Content-Type: application/json' -d' 
+{ "mappings" : 
+	{"count1" : 
+		{"numeric_detection" : true
+		}
+	}
+}'
+
+curl -XPUT 'localhost:9200/index_three?pretty' -d @join2.json -H 'Content-Type:application/json
+
+curl -XPUT 'localhost:9200/index_one?pretty' -d @join2.json -H 'Content-Type:application/json'
+
+---------parent-child-relationship----------------
+//create a index which holds parent and child and grand child mapping
+curl -XPUT 'localhost:9200/index_six?pretty' -d @join-index.json -H 'Content-type: application/json'
+
+//create question document
+curl -XPOST 'localhost:9200/index_six/_doc' -d @question.json -H 'Content-type: application/json'
+
+//get the question data inserted
+curl -XGET 'localhost:9200/index_six/_doc/aM2G-HABJghyi_9lZpdh?pretty' -H 'Content-type: application/json'
+
+
+//create another question
+curl -XPOST 'localhost:9200/index_six/_doc' -d @question2.json -H 'Content-type: application/json'
+
+//get the question2 data which was inserted above
+curl -XGET 'localhost:9200/index_six/_doc/ac2L-HABJghyi_9lDJcu?pretty' -H 'Content-type: application/json'
+
+
+//create an answer for question1
+curl -XPOST 'localhost:9200/index_six/_doc?routing=aM2G-HABJghyi_9lZpdh' -d @answer1.json -H 'Content-type: application/json'
+
+//get answer which was create above
+curl -XGET 'localhost:9200/index_six/_doc/as2R-HABJghyi_9l85dq?pretty' -H 'Content-type:application/json'
+
+//create another Answer for question 1
+curl -XPOST 'localhost:9200/index_six/_doc?routing=aM2G-HABJghyi_9lZpdh' -d @answer2.json -H 'Content-type: application/json'
+
+
+
+
+
+
+
