@@ -52,6 +52,9 @@ curl -XGET 'localhost:9200/index_six/_doc/as2R-HABJghyi_9l85dq?pretty' -H 'Conte
 //create another Answer for question 1
 curl -XPOST 'localhost:9200/index_six/_doc?routing=aM2G-HABJghyi_9lZpdh' -d @answer2.json -H 'Content-type: application/json'
 
+//get all the document posted (questions and answers)
+curl -XGET 'localhost:9200/index_six/_search' -d @query1.json -H 'Content-type:application/json'                         
+
 
 
 
